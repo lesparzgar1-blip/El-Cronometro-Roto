@@ -1,4 +1,4 @@
-﻿while (true)
+﻿ while (true)
 {
 
 Console.WriteLine("=========================");
@@ -141,6 +141,8 @@ switch (opcion)
             Console.WriteLine("Opcion invalida, no se asigna extra");
             break;
             }
+            Console.WriteLine($"Extras elegidos: {cantidadExtra}");
+            Console.WriteLine($"Importe: {precioExtra}");
             }
         
     } 
@@ -198,8 +200,6 @@ switch (opcion)
     }
     double PrecioTotal = precioBase + precioExtra + preciomodalidad;
     Console.WriteLine($"Total: {PrecioTotal}");
-
-    
 
     break;
     case 2:
