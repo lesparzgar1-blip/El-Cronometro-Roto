@@ -200,10 +200,41 @@ switch (opcion)
     }
     double PrecioTotal = precioBase + precioExtra + preciomodalidad;
     Console.WriteLine($"Total: {PrecioTotal}");
+    double descuento = 0;
+    if (PrecioTotal >= 70  )
+    {
+        descuento = PrecioTotal * 0.10;
+    }
+    double totalFinal = PrecioTotal - descuento;
+
+    Console.WriteLine("---- DESGLOSE ----");
+    Console.WriteLine($"Precio base: {precioBase}€");
+    Console.WriteLine($"Extras: {precioExtra}€");
+    Console.WriteLine($"Modalidad: {preciomodalidad} €");
+    Console.WriteLine($"Subtotal:{PrecioTotal} €");
+    Console.WriteLine($"Descuento: {descuento} €");
+    Console.WriteLine($"TOTAL FINAL: {totalFinal}€");
+    Console.WriteLine();
+
+    double dineroEntregado = 0;
+    while (dineroEntregado < PrecioTotal)
+    {
+        Console.WriteLine("Dinero entregado:");
+        dineroEntregado = double.Parse(Console.ReadLine());
+
+        if (dineroEntregado < totalFinal )
+        {
+            Console.WriteLine("ERROR: Falta dinero");
+        }
+    }
+    double cambio = dineroEntregado - totalFinal;
+
+    Console.WriteLine($"Dinero entregado: {dineroEntregado}");
+    Console.WriteLine($"Cambio: {cambio}");
 
     break;
     case 2:
-        Console.WriteLine("==== RESUMEN DE LA ACTIVIDAD");
+        Console.WriteLine("==== RESUMEN DE LA ACTIVIDAD ====");
 
     break;
 
