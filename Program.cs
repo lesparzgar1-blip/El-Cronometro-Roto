@@ -1,4 +1,10 @@
-﻿ while (true)
+﻿int operaciones = 0;
+double recaudacion = 0;
+double importeMasCaro = 0;
+string clienteMasCaro = "";
+bool salir = false;
+
+while (salir == false)
 {
 
 Console.WriteLine("=========================");
@@ -152,23 +158,27 @@ switch (opcion)
     }   
     
     double precioBase = 0 ;
+    string nombreExpedicion = "";
     switch (expedicion)
     {
         case 1:
         Console.WriteLine("Expedicio elegido: El Santuario Olvidado");
         precioBase = 50;
+        nombreExpedicion = "El Santuario Olvidado";
         Console.WriteLine($"Precio base: {precioBase}");
         break;
 
         case 2:
         Console.WriteLine("Expedicio elegido: El Templo del Tiempo");
         precioBase = 55;
+        nombreExpedicion = "El Templo del Tiempo";
         Console.WriteLine($"Precio base: {precioBase}");
         break;
 
         case 3:
         Console.WriteLine("Expedicio elegido: La camara de los Sabios");
         precioBase = 60;
+        nombreExpedicion = "La camara de los Sabios";
         Console.WriteLine($"Precio base: {precioBase}");
         break;
     }
@@ -199,7 +209,7 @@ switch (opcion)
         }
     }
     double PrecioTotal = precioBase + precioExtra + preciomodalidad;
-    Console.WriteLine($"Total: {PrecioTotal}");
+
     double descuento = 0;
     if (PrecioTotal >= 70  )
     {
@@ -217,7 +227,7 @@ switch (opcion)
     Console.WriteLine();
 
     double dineroEntregado = 0;
-    while (dineroEntregado < PrecioTotal)
+    while (dineroEntregado < totalFinal)
     {
         Console.WriteLine("Dinero entregado:");
         dineroEntregado = double.Parse(Console.ReadLine());
@@ -229,17 +239,80 @@ switch (opcion)
     }
     double cambio = dineroEntregado - totalFinal;
 
-    Console.WriteLine($"Dinero entregado: {dineroEntregado}");
-    Console.WriteLine($"Cambio: {cambio}");
+    operaciones = operaciones + 1;
+    recaudacion = recaudacion + totalFinal;
+    if (totalFinal > importeMasCaro)
+    {
+        importeMasCaro = totalFinal;
+        clienteMasCaro = Nombre;
+    }
+    
+
+    Console.WriteLine("==== RECIBO ====");
+    Console.WriteLine($"Operacion nº: {operaciones} ");
+    Console.WriteLine($"Responsable: {Nombre}");
+    Console.WriteLine($"Participantes: {numeroparticipantes}");
+    Console.WriteLine($"Expedicion: {nombreExpedicion}");
+    Console.WriteLine("Extras:");
+    if (cantidadExtra == 0)
+    {
+        Console.WriteLine("Ninguno");
+    }
+    if (ayudaElegida)
+    {
+        Console.WriteLine("Ayuda del explorador");
+    }
+    if (tiempoElegido)
+    {
+        Console.WriteLine("Tiempo adicional");
+    }
+    if (reliquiaElegida)
+    {
+        Console.WriteLine(" Reliquia elegida ");
+    }
+
+    if (modalidad == 1)
+    {
+        Console.WriteLine($"Modalidad: Estandar ");
+    }
+    else 
+    {
+        Console.WriteLine($"Modalidad: Especial ");
+    }
+
+        Console.WriteLine("--- DETALLES DEL PAGO ---");
+        Console.WriteLine($"Subtotal: {PrecioTotal}€");
+        Console.WriteLine($"Descuento: - {descuento}€");
+        Console.WriteLine($"Total Final: {totalFinal}€");
+        Console.WriteLine($"Dinero entregado: {dineroEntregado}€");
+        Console.WriteLine($"Cambio: {cambio}€");
 
     break;
+
     case 2:
         Console.WriteLine("==== RESUMEN DE LA ACTIVIDAD ====");
+        if (operaciones == 0)
+        {
+            Console.WriteLine("Todavia no hay actividad");
+        }
+        else
+        {
+            double precioMedio = recaudacion / operaciones;
 
+            Console.WriteLine($"Expediciones realizadas: {operaciones} ");
+            Console.WriteLine($"Ingresos totales: {recaudacion} €");
+            Console.WriteLine($"Precio medio: {precioMedio} €");
+            Console.WriteLine ($"Expedicion mas cara: {importeMasCaro} €");
+            Console.WriteLine($"Cliente de la expedicion mas cara: {clienteMasCaro}");
+        }
     break;
 
     case 0:
+    salir = true;
     Console.WriteLine("Gracias por visitar El Cronometro Roto");
+
+    Console.WriteLine("Operaciones realizadas: " + operaciones);
+    Console.WriteLine("Ingresos totales: " + recaudacion + "€");
     break;
 
     default:
