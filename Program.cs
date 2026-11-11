@@ -1,9 +1,11 @@
-﻿int operaciones = 0;
-double recaudacion = 0;
-double importeMasCaro = 0;
-string clienteMasCaro = "";
-bool salir = false;
+﻿//Variables globales del resumen: se acumulan durante toda la ejecucion del programa
+int operaciones = 0; // Cuenta cuantas expediciones se han cobrado
+double recaudacion = 0; // Suma de los totales finales de todas las expediciones
+double importeMasCaro = 0;// Mayor total final registrado hasta ahora
+string clienteMasCaro = "";//Responsable de esa expedicion mas cara
+bool salir = false;// Bandera que controla el bucle del menu principal
 
+// Bucle del menú principal: se repite hasta que el usuario elige 0 (salir pasa a true)
 while (salir == false)
 {
 
@@ -18,9 +20,12 @@ Console.WriteLine("0.Salir");
 
 Console.Write("¿Que opcion escogera?");
 int opcion = int.Parse(Console.ReadLine());
+
+// Según la opción: 1 = nueva expedición, 2 = resumen, 0 = salir
 switch (opcion)
 {
     case 1:
+    // Pedir nombre del responsable: se repite mientras se deje vacío
     string Nombre = "";
     while (Nombre == "")
     {
@@ -32,6 +37,8 @@ switch (opcion)
     }
 
     }
+
+// Validar número de participantes: solo se acepta entre 2 y 6
     int numeroparticipantes = 0;
     while (numeroparticipantes < 2 || numeroparticipantes > 6)
     {
@@ -46,7 +53,8 @@ switch (opcion)
         Console.WriteLine("ERROR:Numero de participantes inconrrecto");
     }
     }
-    
+
+// Elegir expedición (1-3): se repite hasta que la opción sea válida
     int expedicion = 0;
 
     while(expedicion < 1 || expedicion > 3)
@@ -69,6 +77,8 @@ switch (opcion)
     }
     }
 
+// Variables de extras: las banderas evitan contratar el mismo extra dos veces
+// cantidadExtra cuenta cuántos se han elegido y precioExtra acumula su coste
     bool ayudaElegida = false;
     bool tiempoElegido = false;
     bool reliquiaElegida = false;
@@ -81,6 +91,7 @@ switch (opcion)
         Console.Write("Desea añadir una opcion extra para mejorar su aventura (SI /NO)");
         string respuestausuario = Console.ReadLine();
 
+// Si el usuario quiere extras, se muestra el menú de extras hasta que escriba 0
     if (respuestausuario?.ToUpper() == "SI")
     {
         while(opcionExtra != 0)
@@ -96,6 +107,7 @@ switch (opcion)
         switch (opcionExtra)
         {
             case 1:
+            // Si ya está contratado se avisa; si no, se marca, se suma 1 al contador y su precio (5€)
             if (ayudaElegida)
             {
                 Console.WriteLine("Ya has contratado este servicio");
@@ -110,6 +122,7 @@ switch (opcion)
             break;
             
             case 2:
+            // Igual que el anterior: tiempo adicional (8€), solo una vez
             if(tiempoElegido)
             {
                 Console.WriteLine("Ya has contratado este servicio");
@@ -123,6 +136,7 @@ switch (opcion)
             break;
 
             case 3:
+            // Igual que el anterior: reliquia del templo (7€), solo una vez
             if (reliquiaElegida)
             {
                 Console.WriteLine("Ya has contratado este servicio");
@@ -137,6 +151,7 @@ switch (opcion)
             break;
 
             case 0:
+            // Termina la selección de extras (el while se corta porque opcionExtra vale 0)
             if (opcionExtra == 0)
             {
                 Console.WriteLine("Has terminado de elegir extras");
@@ -144,6 +159,7 @@ switch (opcion)
             break;
 
             default:
+            // Cualquier otro número es inválido y no se añade ningún extra
             Console.WriteLine("Opcion invalida, no se asigna extra");
             break;
             }
@@ -157,6 +173,7 @@ switch (opcion)
         Console.WriteLine("Pues vuestra aventura comenzara en breve");
     }   
     
+    // Asignar el nombre y el precio base según la expedición elegida (50€, 55€ o 60€)
     double precioBase = 0 ;
     string nombreExpedicion = "";
     switch (expedicion)
@@ -183,6 +200,7 @@ switch (opcion)
         break;
     }
 
+// Elegir modalidad: Estándar (0€) o Especial (10€), se repite hasta que sea válida
     int modalidad = 0 ;
     double preciomodalidad = 0;
 
@@ -208,8 +226,11 @@ switch (opcion)
             Console.WriteLine("ERROR:modalidad no existen");
         }
     }
+
+    // Subtotal = precio base + extras + modalidad
     double PrecioTotal = precioBase + precioExtra + preciomodalidad;
 
+    // Subtotal = precio base + extras + modalidad
     double descuento = 0;
     if (PrecioTotal >= 70  )
     {
@@ -217,6 +238,7 @@ switch (opcion)
     }
     double totalFinal = PrecioTotal - descuento;
 
+// Mostrar el desglose del precio antes de cobrar
     Console.WriteLine("---- DESGLOSE ----");
     Console.WriteLine($"Precio base: {precioBase}€");
     Console.WriteLine($"Extras: {precioExtra}€");
@@ -226,6 +248,7 @@ switch (opcion)
     Console.WriteLine($"TOTAL FINAL: {totalFinal}€");
     Console.WriteLine();
 
+// Cobro: se pide dinero hasta que cubra el total final
     double dineroEntregado = 0;
     while (dineroEntregado < totalFinal)
     {
@@ -239,21 +262,25 @@ switch (opcion)
     }
     double cambio = dineroEntregado - totalFinal;
 
+// Actualizar las estadísticas del resumen (nº de operaciones, ingresos y expedición más cara)
     operaciones = operaciones + 1;
     recaudacion = recaudacion + totalFinal;
+
     if (totalFinal > importeMasCaro)
     {
         importeMasCaro = totalFinal;
         clienteMasCaro = Nombre;
     }
     
-
+// Imprimir el recibo final con todos los datos de la operación
     Console.WriteLine("==== RECIBO ====");
     Console.WriteLine($"Operacion nº: {operaciones} ");
     Console.WriteLine($"Responsable: {Nombre}");
     Console.WriteLine($"Participantes: {numeroparticipantes}");
     Console.WriteLine($"Expedicion: {nombreExpedicion}");
     Console.WriteLine("Extras:");
+
+// Listar los extras contratados; si no hay ninguno, se indica "Ninguno"
     if (cantidadExtra == 0)
     {
         Console.WriteLine("Ninguno");
@@ -291,12 +318,15 @@ switch (opcion)
 
     case 2:
         Console.WriteLine("==== RESUMEN DE LA ACTIVIDAD ====");
+
+    // Si aún no se ha cobrado ninguna expedición, no hay datos que mostrar
         if (operaciones == 0)
         {
             Console.WriteLine("Todavia no hay actividad");
         }
         else
         {
+        // Precio medio = ingresos totales / número de expediciones
             double precioMedio = recaudacion / operaciones;
 
             Console.WriteLine($"Expediciones realizadas: {operaciones} ");
@@ -308,6 +338,7 @@ switch (opcion)
     break;
 
     case 0:
+    // Poner salir a true para que el while termine, y mostrar el resumen final
     salir = true;
     Console.WriteLine("Gracias por visitar El Cronometro Roto");
 
@@ -316,6 +347,7 @@ switch (opcion)
     break;
 
     default:
+    // Si la opción no es 0, 1 ni 2, se avisa y el menú se vuelve a mostrar
     Console.WriteLine("Opción de menú inválida.");
     break;
 
